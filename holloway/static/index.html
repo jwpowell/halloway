@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holloway</title>
+<style>
+  :root {
+    --panel: rgba(22, 22, 24, 0.82);
+    --text: #e8e6e1;
+    --muted: #9a978f;
+    --accent: #d8c9a8;
+    --error: #ff6b5e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #1a1a1c; color: var(--text);
+    font: 12px/1.4 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  canvas { display: block; }
+  .panel { position: fixed; background: var(--panel); border-radius: 6px; padding: 10px 12px;
+    backdrop-filter: blur(6px); user-select: none; }
+  #hud { top: 12px; left: 12px; min-width: 220px; }
+  #hud .name { font-weight: 600; color: var(--accent); }
+  #status { display: inline-block; padding: 0 6px; border-radius: 3px; margin-left: 6px; font-size: 11px; }
+  #status.ready { background: #2f4a33; } #status.building { background: #4a432a; } #status.error { background: #5a2723; }
+  #hud .row { color: var(--muted); }
+  #controls { top: 12px; right: 12px; width: 240px; }
+  #controls h3 { margin: 0 0 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 500; }
+  .seg { display: flex; gap: 2px; margin-bottom: 10px; }
+  .seg button { flex: 1; background: #333; color: var(--text); border: 0; padding: 5px 0; font: inherit; cursor: pointer; }
+  .seg button:first-child { border-radius: 4px 0 0 4px; } .seg button:last-child { border-radius: 0 4px 4px 0; }
+  .seg button.on { background: var(--accent); color: #111; }
+  label { display: grid; grid-template-columns: 70px 1fr 34px; align-items: center; gap: 6px; margin: 4px 0; }
+  label span:last-child { text-align: right; color: var(--muted); }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .check { display: flex; gap: 6px; grid-template-columns: none; }
+  #hint { bottom: 12px; left: 50%; transform: translateX(-50%); color: var(--muted); white-space: nowrap; }
+  #error { display: none; bottom: 50px; left: 12px; right: 12px; max-height: 45vh; overflow: auto;
+    border-left: 3px solid var(--error); white-space: pre-wrap; color: #ffd9d4; user-select: text; }
+  #cross { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px;
+    border-radius: 50%; background: rgba(255,255,255,.6); display: none; pointer-events: none; }
+</style>
+<script type="importmap">{ "imports": { "three": "/static/vendor/three.module.js" } }</script>
+</head>
+<body>
+<div id="hud" class="panel">
+  <div><span class="name" id="name">holloway</span><span id="status" class="building">connecting</span></div>
+  <div class="row" id="stats">&nbsp;</div>
+  <div class="row" id="pos">&nbsp;</div>
+</div>
+<div id="controls" class="panel">
+  <h3>Lighting</h3>
+  <div class="seg" id="mode">
+    <button data-mode="ambient">Ambient</button><button data-mode="sun">Sun</button><button data-mode="both">Both</button>
+  </div>
+  <label><span>ambient</span><input type="range" id="ambient" min="0" max="3" step="0.05"><span id="ambientV"></span></label>
+  <label><span>sun</span><input type="range" id="sun" min="0" max="10" step="0.1"><span id="sunV"></span></label>
+  <label><span>azimuth</span><input type="range" id="azimuth" min="0" max="360" step="1"><span id="azimuthV"></span></label>
+  <label><span>elevation</span><input type="range" id="elevation" min="1" max="90" step="1"><span id="elevationV"></span></label>
+  <h3 style="margin-top:10px">View</h3>
+  <label class="check"><input type="checkbox" id="edges"> edges</label>
+</div>
+<div id="hint" class="panel">click to fly · WASD move · Space/E up · C/Q down · Shift fast · wheel speed · R respawn · Esc release</div>
+<pre id="error" class="panel"></pre>
+<div id="cross"></div>
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>
